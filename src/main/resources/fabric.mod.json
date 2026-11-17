@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "allthetrims",
+  "version": "${version}",
+  "name": "All The Trims (UNOFFICIAL)",
+  "description": "Unofficial Fabric 1.21.1 port of All The Trims: use any item as an armor trim material and trim modded armor.",
+  "authors": [
+    "Bawnorton (original)",
+    "JustHari01 (1.21.1 port)"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/allthetrims",
+    "sources": "https://github.com/JustHari01/AllTheTrims-1.21.1-Fabric-Port",
+    "issues": "https://github.com/JustHari01/AllTheTrims-1.21.1-Fabric-Port/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/allthetrims/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.bawnorton.allthetrims.platform.AllTheTrimsWrapper"
+    ],
+    "client": [
+      "com.bawnorton.allthetrims.client.platform.AllTheTrimsClientWrapper"
+    ],
+    "rei_client": [
+      "com.bawnorton.allthetrims.client.compat.recipebrowser.rei.ReiPluginImpl"
+    ],
+    "emi": [
+      "com.bawnorton.allthetrims.client.compat.recipebrowser.emi.EmiPluginImpl"
+    ],
+    "jei_mod_plugin": [
+      "com.bawnorton.allthetrims.client.compat.recipebrowser.jei.JeiPluginImpl"
+    ],
+    "mixinsquared-adjuster": [
+      "com.bawnorton.allthetrims.AllTheTrimsAnnotationAdjuster"
+    ]
+  },
+  "mixins": [
+    "allthetrims.mixins.json",
+    "allthetrims-compat.mixins.json",
+    {
+      "config": "allthetrims-client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "${minecraft_dependency}",
+    "java": ">=${java}",
+    "fabric-api": "*",
+    "runtimetrims": ">=1.0.1"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "allthetrims.website": "https://github.com/JustHari01/AllTheTrims-1.21.1-Fabric-Port"
+      }
+    }
+  },
+  "suggests": {
+    "modmenu": "*",
+    "roughlyenoughitems": "*",
+    "emi": "*",
+    "jei": "*",
+    "elytratrims": "*"
+  }
+}

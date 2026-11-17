@@ -1,0 +1,125 @@
+package com.bawnorton.allthetrims.client.compat.recipebrowser.jei;
+
+import com.bawnorton.allthetrims.AllTheTrims;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.helpers.ICodecHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.IRecipeManager;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.library.plugins.vanilla.anvil.SmithingRecipeCategory;
+import mezz.jei.library.plugins.vanilla.crafting.VanillaRecipes;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.SmithingTrimRecipe;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
+
+import com.mojang.serialization.Codec;
+import java.util.List;
+
+//? if >1.20.6
+import net.minecraft.recipe.RecipeEntry;
+//? if neoforge
+/*@mezz.jei.api.JeiPlugin*/
+public final class JeiPluginImpl implements IModPlugin {
+    @SuppressWarnings("unchecked")
+    public static final RecipeType<RecipeEntry<SmithingRecipe>> TRIMMING = new RecipeType<>(AllTheTrims.id("trimming"), (Class<RecipeEntry<SmithingRecipe>>) (Object) RecipeEntry.class);
+    public static IRecipeCategory<RecipeEntry<SmithingRecipe>> smithingCategory;
+
+    public static boolean isTrimming(SmithingRecipe recipe) {
+        return recipe instanceof SmithingTrimRecipe;
+    }
+
+    @Override
+    public @NotNull Identifier getPluginUid() {
+        return AllTheTrims.id("jei_plugin");
+    }
+
+    @Override
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        registration.addRecipeCategories(smithingCategory = new AllTheTrimsSmithingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+    }
+
+    @Override
+    public void registerRecipes(IRecipeRegistration registration) {
+        registration.addRecipes(TRIMMING, new VanillaRecipes(registration.getIngredientManager()).getSmithingRecipes(smithingCategory));
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(Blocks.SMITHING_TABLE), TRIMMING);
+    }
+
+    private static final class AllTheTrimsSmithingRecipeCategory extends AbstractRecipeCategory<RecipeEntry<SmithingRecipe>> {
+        private final SmithingRecipeCategory smithingDelegate;
+
+        public AllTheTrimsSmithingRecipeCategory(IGuiHelper guiHelper) {
+            this(guiHelper, new SmithingRecipeCategory(guiHelper), new CyclingDrawable(
+                    Registries.ITEM.streamEntries()
+                            .filter(ref -> ref.isIn(ItemTags.TRIM_TEMPLATES))
+                            .map(RegistryEntry.Reference::value)
+                            .map(Item::getDefaultStack)
+                            .map(guiHelper::createDrawableItemStack)
+                            .toList(),
+                    1000
+            ));
+        }
+
+        private AllTheTrimsSmithingRecipeCategory(IGuiHelper guiHelper, SmithingRecipeCategory smithingDelegate, IDrawable icon) {
+            super(TRIMMING, Text.translatable("emi.category.allthetrims.trimming"), icon, smithingDelegate.getWidth(), smithingDelegate.getHeight());
+            this.smithingDelegate = smithingDelegate;
+        }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, RecipeEntry<SmithingRecipe> recipe, IFocusGroup focuses) {
+            smithingDelegate.setRecipe(builder, recipe, focuses);
+        }
+
+        @Override
+        public void createRecipeExtras(IRecipeExtrasBuilder builder, RecipeEntry<SmithingRecipe> recipe, IFocusGroup focuses) {
+            smithingDelegate.createRecipeExtras(builder, recipe, focuses);
+        }
+
+        @Override
+        public void onDisplayedIngredientsUpdate(RecipeEntry<SmithingRecipe> recipe, List<IRecipeSlotDrawable> recipeSlots, IFocusGroup focuses) {
+            smithingDelegate.onDisplayedIngredientsUpdate(recipe, recipeSlots, focuses);
+        }
+
+        @Override
+        public Identifier getRegistryName(RecipeEntry<SmithingRecipe> recipe) {
+            return smithingDelegate.getRegistryName(recipe);
+        }
+
+        @Override
+        public Codec<RecipeEntry<SmithingRecipe>> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
+            return smithingDelegate.getCodec(codecHelper, recipeManager);
+        }
+
+        @Override
+        public IDrawable getBackground() {
+            return smithingDelegate.getBackground();
+        }
+
+        @Override
+        public boolean isHandled(RecipeEntry<SmithingRecipe> recipeEntry) {
+            return JeiPluginImpl.isTrimming(recipeEntry.value());
+        }
+
+    }
+}

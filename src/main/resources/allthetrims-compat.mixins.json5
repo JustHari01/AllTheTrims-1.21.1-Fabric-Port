@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.bawnorton.allthetrims.mixin.compat",
+  "minVersion": "0.8",
+  "plugin": "com.bawnorton.allthetrims.mixin.compat.AllTheTrimsCompatMixinPlugin",
+  "mixins": [
+    //? if fabric {
+    "fabric.mythicmetals.MythicMetalsClientMixin",
+    //?}
+    "rei.DefaultClientPluginMixin",
+    "emi.VanillaPluginMixin",
+    "jei.SmithingRecipeCategoryMixin",
+    "elytratrims.AllTheTrimsCompatMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "${refmap}"
+}

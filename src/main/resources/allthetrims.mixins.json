@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "package": "com.bawnorton.allthetrims.mixin",
+  "minVersion": "0.8",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/Bawnorton/AllTheTrims/issues"
+license = "MIT"
+
+[[mods]]
+modId = "allthetrims"
+version = "${version}"
+displayName = "AllTheTrims"
+authors = "Bawnorton"
+description = '''
+A mod that allows any item to be a trim material and makes all armour trimmable.
+'''
+logoFile = "assets/allthetrims/icon.png"
+
+[[mixins]]
+config = "allthetrims.mixins.json"
+
+[[mixins]]
+config = "allthetrims-client.mixins.json"
+
+[[mixins]]
+config = "allthetrims-compat.mixins.json"
+
+[[dependencies.allthetrims]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_dependency}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.allthetrims]]
+modId = "runtimetrims"
+type = "required"
+versionRange = ">=1.0.0"
+ordering = "NONE"
+side = "BOTH"
