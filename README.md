@@ -15,7 +15,7 @@ An unofficial Fabric port of [All The Trims](https://modrinth.com/mod/allthetrim
 - Minecraft Java Edition 1.21.1
 - Fabric Loader 0.16.14 or newer
 - Fabric API
-- RuntimeTrims 1.0.1 or newer
+- RuntimeTrims 1.0.6 or newer
 - Java 21
 
 Install the mod and its required dependencies on both the client and server. Mod Menu, REI, EMI, JEI, and Elytra Trims integrations are optional.
