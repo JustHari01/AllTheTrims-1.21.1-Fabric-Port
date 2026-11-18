@@ -49,7 +49,7 @@
     "minecraft": "${minecraft_dependency}",
     "java": ">=${java}",
     "fabric-api": "*",
-    "runtimetrims": ">=1.0.1"
+    "runtimetrims": ">=1.0.6"
   },
   "custom": {
     "modmenu": {
